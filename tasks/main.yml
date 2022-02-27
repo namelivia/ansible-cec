@@ -1,0 +1,27 @@
+---
+- name: Install required system packages
+  apt: name={{ item }} state=latest update_cache=yes
+  loop:
+    - 'cec-utils'
+
+- name: Create the bin directory
+  file:
+    path: "{{ hostvars[inventory_hostname].working_directory }}/bin"
+    state: directory
+    mode: 0755
+
+- name: Copy turn on script
+  template:
+    src: turn_on.j2
+    dest: "{{ hostvars[inventory_hostname].working_directory }}/bin/turn_on.sh"
+    owner: root
+    group: root
+    mode: '0644'
+
+- name: Copy turn off script
+  template:
+    src: turn_off.j2
+    dest: "{{ hostvars[inventory_hostname].working_directory }}/bin/turn_off.sh"
+    owner: root
+    group: root
+    mode: '0644'
